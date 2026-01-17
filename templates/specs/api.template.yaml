@@ -1,0 +1,409 @@
+openapi: 3.0.3
+info:
+  title: API Specification Template
+  description: |
+    Template for API specifications using OpenAPI 3.0.
+
+    Replace placeholders:
+    - [API Name]: Your API name
+    - [Resource]: Your resource name (e.g., User, Product)
+    - [resource]: Lowercase resource name
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: api@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production
+  - url: https://staging-api.example.com/v1
+    description: Staging
+  - url: http://localhost:3000/v1
+    description: Local development
+
+tags:
+  - name: resources
+    description: Resource management operations
+  - name: auth
+    description: Authentication operations
+
+paths:
+  # ============================================================================
+  # Resource Endpoints
+  # ============================================================================
+
+  /resources:
+    get:
+      summary: List resources
+      description: Retrieve a paginated list of resources
+      operationId: listResources
+      tags:
+        - resources
+      parameters:
+        - name: skip
+          in: query
+          description: Number of items to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Maximum number of items to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: sort
+          in: query
+          description: Sort field and order (e.g., "created_at:desc")
+          required: false
+          schema:
+            type: string
+            enum:
+              - created_at:asc
+              - created_at:desc
+              - name:asc
+              - name:desc
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Resource'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      summary: Create a resource
+      description: Create a new resource
+      operationId: createResource
+      tags:
+        - resources
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceCreate'
+            examples:
+              basic:
+                summary: Basic resource
+                value:
+                  name: "Example Resource"
+                  description: "This is an example"
+      responses:
+        '201':
+          description: Resource created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /resources/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Resource ID
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get a resource
+      description: Retrieve a single resource by ID
+      operationId: getResource
+      tags:
+        - resources
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      summary: Update a resource
+      description: Update an existing resource
+      operationId: updateResource
+      tags:
+        - resources
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceUpdate'
+      responses:
+        '200':
+          description: Resource updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      summary: Delete a resource
+      description: Permanently delete a resource
+      operationId: deleteResource
+      tags:
+        - resources
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Resource deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+# ============================================================================
+# Components
+# ============================================================================
+
+components:
+  # Security Schemes
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /auth/login
+
+  # Schemas
+  schemas:
+    Resource:
+      type: object
+      required:
+        - id
+        - name
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique resource identifier
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Resource name
+          example: "Example Resource"
+        description:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: Optional resource description
+          example: "This is an example resource"
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - archived
+          default: active
+          description: Resource status
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional metadata
+          example:
+            key1: "value1"
+            key2: "value2"
+        created_at:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2024-01-17T10:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-17T10:00:00Z"
+
+    ResourceCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Resource name
+        description:
+          type: string
+          maxLength: 500
+          description: Optional description
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Additional metadata
+
+    ResourceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Updated resource name
+        description:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: Updated description
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - archived
+          description: Updated status
+        metadata:
+          type: object
+          additionalProperties: true
+          description: Updated metadata
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: "validation_error"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid input data"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field name
+              message:
+                type: string
+                description: Field-specific error message
+          description: Detailed field errors (for validation errors)
+          example:
+            - field: "name"
+              message: "Name is required"
+
+    Pagination:
+      type: object
+      required:
+        - total
+        - skip
+        - limit
+      properties:
+        total:
+          type: integer
+          description: Total number of items
+          example: 100
+        skip:
+          type: integer
+          description: Number of items skipped
+          example: 0
+        limit:
+          type: integer
+          description: Maximum items returned
+          example: 10
+        has_more:
+          type: boolean
+          description: Whether more items exist
+          example: true
+
+  # Reusable Responses
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "validation_error"
+            message: "Invalid input data"
+            details:
+              - field: "name"
+                message: "Name is required"
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "unauthorized"
+            message: "Authentication required"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "not_found"
+            message: "Resource not found"
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "internal_error"
+            message: "An unexpected error occurred"
