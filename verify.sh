@@ -53,6 +53,7 @@ check_executable() {
 echo "Core Files:"
 check_file "README.md"
 check_file "QUICKSTART.md"
+check_file "CLAUDE.md"
 check_file ".gitignore"
 check_file "core/CLAUDE.md"
 check_executable "install.sh"

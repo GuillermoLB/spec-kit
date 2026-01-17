@@ -254,14 +254,6 @@ No. Spec-Kit automatically handles exceptions:
 
 Spec-Kit is optimized for Claude Code, but the specs and patterns are valuable regardless of tool. The CLAUDE.md file could be adapted for other AI coding assistants.
 
-### How is this different from GitHub's Spec Kit?
-
-GitHub's Spec Kit is more opinionated and includes CLI tools. Spec-Kit is:
-- Lighter weight (just markdown files)
-- Claude Code-specific
-- Focused on practical, immediate use
-- Customizable for your stack (FastAPI, AWS SAM, etc.)
-
 ### Can I modify the installed files?
 
 Yes! Once installed, files are copied to your project. Customize them for your needs. The `.spec-kit-templates/` folder contains reference templates.
