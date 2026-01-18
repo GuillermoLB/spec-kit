@@ -22,18 +22,18 @@ This document tracks all feature specifications for spec-kit enhancement. Each s
 
 | # | Specification | Priority | Status | Complexity |
 |---|--------------|----------|--------|------------|
-| 1 | cli-modernization.md | High | Draft | Medium-High |
-| 2 | testing-infrastructure.md | High | Draft | Medium |
-| 3 | example-fastapi-todo.md | High | Draft | Medium-High |
-| 4 | example-ai-chatbot.md | High | Draft | Medium |
-| 5 | example-sam-serverless.md | Medium | Draft | High |
-| 6 | plugin-testing.md | Medium | Draft | Medium |
-| 7 | plugin-cicd.md | Medium | Draft | Medium |
-| 8 | plugin-database.md | Medium | Draft | Medium-High |
-| 9 | plugin-frontend.md | Low | Draft | Medium-High |
+| 1 | testing-infrastructure.md | High | Draft | Medium |
+| 2 | example-fastapi-todo.md | High | Draft | Medium-High |
+| 3 | example-ai-chatbot.md | High | Draft | Medium |
+| 4 | example-sam-serverless.md | Medium | Draft | High |
+| 5 | plugin-testing.md | Medium | Draft | Medium |
+| 6 | plugin-cicd.md | Medium | Draft | Medium |
+| 7 | plugin-database.md | Medium | Draft | Medium-High |
+| 8 | plugin-frontend.md | Low | Draft | Medium-High |
+| - | **cli-modernization.md** | **-** | **✅ Implemented (Phase 1)** | **Medium-High** |
 | - | **documentation-improvements.md** | **-** | **✅ Implemented** | **Low** |
 
-**Total**: 9 remaining specifications (1 implemented)
+**Total**: 8 remaining specifications (2 implemented)
 
 ## Implementation Phases
 
@@ -46,9 +46,9 @@ This document tracks all feature specifications for spec-kit enhancement. Each s
 ### Phase 2: Foundation - IN PROGRESS
 **What**: Modernize tooling and establish testing
 
-1. **cli-modernization** - Professional Python CLI to replace bash scripts (NEXT)
-2. **testing-infrastructure** - Automated tests for Python CLI, templates, validation
-3. ✅ **documentation-improvements** - README updates, CONTRIBUTING, troubleshooting (COMPLETED)
+1. ✅ **cli-modernization** - Professional Python CLI to replace bash scripts (Phase 1 MVP COMPLETE)
+2. **testing-infrastructure** - Automated tests for Python CLI, templates, validation (NEXT)
+3. ✅ **documentation-improvements** - README updates, CONTRIBUTING, troubleshooting (COMPLETE)
 
 ### Phase 3: Examples
 **What**: Demonstrate spec-driven development with working projects
