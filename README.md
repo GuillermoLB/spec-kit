@@ -46,11 +46,32 @@ This approach is [recommended by Thoughtworks](https://www.thoughtworks.com/en-u
 
 ## Quick Start
 
-### 1. Install spec-kit into your project
+### 1. Install spec-kit
+
+**Option A: Install globally with pipx (recommended)**
+
+```bash
+pipx install spec-kit
+```
+
+**Option B: Install with pip**
+
+```bash
+pip install spec-kit
+```
+
+**Option C: Use bash installer (legacy)**
 
 ```bash
 cd your-project/
 /path/to/spec-kit/install.sh .
+```
+
+### 2. Initialize spec-kit in your project
+
+```bash
+cd your-project/
+spec-kit init
 ```
 
 The installer will:
@@ -59,7 +80,18 @@ The installer will:
 - Create `specs/` directory structure
 - Add template files for reference
 
-### 2. Start Claude Code
+**Non-interactive installation (CI/CD)**:
+```bash
+spec-kit init --plugins api,ai --no-interactive
+```
+
+### 3. Verify installation (optional)
+
+```bash
+spec-kit verify
+```
+
+### 4. Start Claude Code
 
 ```bash
 claude
@@ -67,7 +99,7 @@ claude
 
 Claude will automatically read `CLAUDE.md` and operate in spec-driven mode.
 
-### 3. Create a specification
+### 5. Create a specification
 
 ```bash
 # Copy the template
@@ -77,7 +109,7 @@ cp specs/feature.template.md specs/features/user-auth.md
 # ... fill in purpose, requirements, acceptance criteria ...
 ```
 
-### 4. Implement with Claude
+### 6. Implement with Claude
 
 ```
 > "Implement the user authentication feature based on specs/features/user-auth.md"
@@ -89,7 +121,7 @@ Claude will:
 3. Write code according to requirements
 4. Validate against acceptance criteria
 
-### 5. Use plugins for domain-specific patterns
+### 7. Use plugins for domain-specific patterns
 
 **Explicit activation**:
 ```

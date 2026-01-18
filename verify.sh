@@ -1,6 +1,12 @@
 #!/bin/bash
 #
-# Spec-Kit Verification Script
+# Spec-Kit Verification Script (DEPRECATED)
+#
+# ⚠️  DEPRECATION NOTICE:
+#    This bash script will be removed in spec-kit v3.0.0
+#    Please use the Python CLI instead:
+#      pipx install spec-kit
+#      spec-kit verify
 #
 # Verifies that spec-kit is properly structured and ready for distribution.
 #
@@ -11,8 +17,13 @@ set -e
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m'
 
+echo -e "${YELLOW}⚠️  DEPRECATION NOTICE${NC}"
+echo "This bash script will be removed in v3.0.0"
+echo "Please use: ${BLUE}spec-kit verify${NC}"
+echo ""
 echo "Verifying Spec-Kit Structure..."
 echo ""
 

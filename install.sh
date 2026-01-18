@@ -1,6 +1,12 @@
 #!/bin/bash
 #
-# Spec-Kit Installer
+# Spec-Kit Installer (DEPRECATED)
+#
+# ⚠️  DEPRECATION NOTICE:
+#    This bash installer will be removed in spec-kit v3.0.0
+#    Please use the Python CLI instead:
+#      pipx install spec-kit
+#      spec-kit init
 #
 # Installs spec-kit into a target project with selected plugins.
 #
@@ -37,6 +43,16 @@ print_header() {
     echo "║          Spec-Driven Development for Claude Code         ║"
     echo "╚══════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
+    echo ""
+    echo -e "${YELLOW}⚠️  DEPRECATION NOTICE${NC}"
+    echo "   This bash installer will be removed in v3.0.0"
+    echo "   Please migrate to the Python CLI:"
+    echo ""
+    echo "     pipx install spec-kit"
+    echo "     spec-kit init"
+    echo ""
+    echo "   For non-interactive mode: spec-kit init --no-interactive"
+    echo ""
 }
 
 print_success() {

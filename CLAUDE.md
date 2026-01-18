@@ -60,7 +60,7 @@ This file defines the development workflow for the spec-kit project itself. We p
 
 ```
 spec-kit/
-├── CLAUDE.md                  # This file
+├── CLAUDE.md                  
 ├── README.md                  # Main documentation
 ├── QUICKSTART.md              # Quick start guide
 ├── core/
@@ -105,7 +105,7 @@ Mark spec status at the top of each spec file:
 
 1. **No Dead Code**: Remove commented code and unused imports
 2. **Error Handling**: Handle errors explicitly, don't silently fail
-3. **Documentation**: Every feature must be documented in README or docs/
+3. **Documentation**: Every feature must be documented
 4. **Testing**: Once testing infrastructure exists, all features must have tests
 5. **Examples**: Complex features should have example projects
 6. **Verification**: All changes must pass `./verify.sh`
@@ -126,42 +126,6 @@ Mark spec status at the top of each spec file:
 - CI/CD plugin
 - Database plugin
 - Frontend plugin
-
-## Code Standards
-
-### Bash Scripts
-- Use shellcheck for validation
-- Include error handling (`set -e`)
-- Clear error messages
-- Colored output for user feedback
-
-### Python Code
-- Follow PEP 8
-- Use type hints
-- Include docstrings
-- Use pytest for testing
-
-### Markdown Documentation
-- Use consistent formatting
-- Include table of contents for long docs
-- Test all links
-- Use relative links within repository
-
-### Plugin Development
-- Follow SKILL.md format with YAML frontmatter
-- Include comprehensive patterns (not just basic examples)
-- Provide production-ready templates
-- Test in real projects before merging
-
-## When Specs Are Missing
-
-If asked to implement something without a spec:
-
-1. Inform that a spec is required
-2. Offer to create a draft spec based on the request
-3. Wait for spec approval before implementing
-
-**Exception**: Trivial changes (typos, formatting, minor README updates) don't require specs.
 
 ## Contributing to Spec-Kit
 
@@ -186,21 +150,6 @@ Before committing changes:
 - Update CHANGELOG.md with all changes
 - Tag releases in git
 - Update version in README
-
-## Current Development Phase
-
-**Status**: Building core enhancements
-**Active Specs**:
-- testing-infrastructure.md (Draft)
-- documentation-improvements.md (Draft)
-
-**Next Steps**:
-1. Complete all feature specifications
-2. Review and approve specs
-3. Implement testing infrastructure first
-4. Implement documentation improvements
-5. Build example projects
-6. Develop new plugins
 
 ## Philosophy
 

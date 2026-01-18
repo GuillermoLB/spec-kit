@@ -4,6 +4,25 @@ Get started with spec-driven development in 5 minutes.
 
 ## Installation
 
+### Option A: Python CLI (Recommended)
+
+```bash
+# Install spec-kit globally
+pipx install spec-kit
+
+# Or with pip
+pip install spec-kit
+
+# Initialize in your project
+cd ~/my-project
+spec-kit init
+
+# Select plugins when prompted
+# Example: Enter "1 2" for api-development and ai-app
+```
+
+### Option B: Bash Installer (Legacy)
+
 ```bash
 # Navigate to your project
 cd ~/my-project
@@ -12,12 +31,15 @@ cd ~/my-project
 /path/to/spec-kit/install.sh .
 
 # Select plugins when prompted
-# Example: Enter "1 2" for api-development and ai-app
 ```
 
 ## Verify Installation
 
-Check that these files were created:
+```bash
+spec-kit verify
+```
+
+Or manually check files:
 
 ```bash
 ls -la
