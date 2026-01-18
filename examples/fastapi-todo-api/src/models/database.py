@@ -4,12 +4,49 @@ This module defines the database schema for todos using SQLAlchemy ORM.
 """
 
 from sqlalchemy import Boolean, Column, DateTime, Enum, String
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.types import TypeDecorator, CHAR
 from datetime import datetime
 import uuid
 import enum
 
 from src.database import Base
+
+
+class GUID(TypeDecorator):
+    """Platform-independent GUID type.
+
+    Uses PostgreSQL's UUID type when available, otherwise uses
+    CHAR(36), storing as stringified hex values.
+    """
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            from sqlalchemy.dialects.postgresql import UUID
+            return dialect.type_descriptor(UUID(as_uuid=True))
+        else:
+            return dialect.type_descriptor(CHAR(36))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return str(value)
+        else:
+            if isinstance(value, uuid.UUID):
+                return str(value)
+            else:
+                return str(uuid.UUID(value))
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        else:
+            if isinstance(value, uuid.UUID):
+                return value
+            else:
+                return uuid.UUID(value)
 
 
 class PriorityEnum(str, enum.Enum):
@@ -38,7 +75,7 @@ class TodoModel(Base):
 
     # Primary key - UUID for better distribution and uniqueness
     id = Column(
-        UUID(as_uuid=True),
+        GUID(),
         primary_key=True,
         default=uuid.uuid4,
         index=True
@@ -66,4 +103,5 @@ class TodoModel(Base):
 
     def __repr__(self) -> str:
         """String representation for debugging."""
-        return f"<Todo {self.id}: {self.title} ({self.priority.value})>"
+        priority_str = self.priority.value if self.priority else "unset"
+        return f"<Todo {self.id}: {self.title} ({priority_str})>"

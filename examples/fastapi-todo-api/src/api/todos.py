@@ -90,7 +90,7 @@ def list_todos(
     completed: Optional[bool] = Query(None, description="Filter by completion status"),
     priority: Optional[Priority] = Query(None, description="Filter by priority level"),
     skip: int = Query(0, ge=0, description="Number of items to skip (pagination)"),
-    limit: int = Query(50, ge=1, le=100, description="Maximum items to return (max 100)"),
+    limit: int = Query(50, ge=1, description="Maximum items to return (capped at 100)"),
     db: Session = Depends(get_db)
 ) -> List[TodoResponse]:
     """List todos with filtering and pagination.
@@ -101,7 +101,7 @@ def list_todos(
         completed: Filter by completion status (optional)
         priority: Filter by priority level (optional)
         skip: Pagination offset (default 0)
-        limit: Max items to return (default 50, max 100)
+        limit: Max items to return (default 50, capped at 100)
         db: Database session (injected)
 
     Returns:
@@ -111,6 +111,9 @@ def list_todos(
         GET /api/v1/todos?completed=false&priority=high&skip=0&limit=20
         Response: [{todo1}, {todo2}, ...]
     """
+    # Cap limit at 100
+    limit = min(limit, 100)
+
     logger.info(
         f"Listing todos: completed={completed}, priority={priority}, "
         f"skip={skip}, limit={limit}"
