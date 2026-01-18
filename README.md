@@ -4,6 +4,27 @@
 
 Spec-Kit is a lightweight, professional toolkit that brings industry-standard spec-driven development practices to your Claude Code workflows. It provides a constitution-based approach with pluggable skills for common development patterns.
 
+## Table of Contents
+
+- [What is Spec-Driven Development?](#what-is-spec-driven-development)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Architecture](#architecture)
+- [Available Plugins](#available-plugins)
+- [Available Templates](#available-templates)
+- [Workflow Example](#workflow-example)
+- [Philosophy](#philosophy)
+- [Creating Your Own Plugins](#creating-your-own-plugins)
+- [Best Practices](#best-practices)
+- [Project Structure Recommendations](#project-structure-recommendations)
+- [FAQ](#faq)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [Troubleshooting](#troubleshooting)
+- [Roadmap](#roadmap)
+- [License](#license)
+- [Credits](#credits)
+
 ## What is Spec-Driven Development?
 
 Spec-driven development (SDD) is a methodology where:
@@ -70,14 +91,27 @@ Claude will:
 
 ### 5. Use plugins for domain-specific patterns
 
+**Explicit activation**:
 ```
-> "/api create endpoint for user registration"
+> "/api-development create endpoint for user registration"
+> "/api create endpoint for user registration"  # Short alias
+```
+
+**Automatic activation** (mention domain keywords):
+```
+> "Create a FastAPI endpoint for user registration with validation"
 ```
 
 The API plugin provides FastAPI and AWS SAM/Lambda patterns.
 
+**Explicit activation**:
 ```
 > "/ai-app integrate Claude API for chat feature"
+```
+
+**Automatic activation**:
+```
+> "Integrate Claude API for the chat feature with streaming responses"
 ```
 
 The AI-app plugin provides LLM integration best practices.
@@ -108,7 +142,7 @@ your-project/
 
 ## Available Plugins
 
-### API Development (`/api`)
+### API Development (`/api-development` or `/api`)
 
 **Focus**: FastAPI + AWS SAM/Lambda
 
@@ -137,6 +171,40 @@ your-project/
 **Templates**:
 - `anthropic-client.py` - Production-ready Claude API client
 - `prompt-patterns.md` - Battle-tested prompt engineering techniques
+
+## Available Templates
+
+Spec-Kit provides templates for different specification types:
+
+### Specification Templates
+
+Located in `specs/`:
+- **`feature.template.md`** - General feature specifications
+  - Comprehensive template with requirements, acceptance criteria, technical details
+  - Use for: New features, enhancements, complex bug fixes
+
+- **`api.template.yaml`** - OpenAPI/REST API specifications
+  - YAML-based API contract definitions
+  - Use for: API endpoints, service interfaces, data models
+
+### Plugin Templates
+
+Located in `.spec-kit-templates/[plugin-name]/`:
+- **API Development** (`api-development/`)
+  - `fastapi-endpoint.py` - Full CRUD endpoint implementation
+  - `sam-template.yaml` - AWS SAM serverless configuration
+
+- **AI Application** (`ai-app/`)
+  - `anthropic-client.py` - Production-ready Claude API client
+  - `prompt-patterns.md` - Prompt engineering best practices
+
+**Usage**:
+```bash
+# Copy a template to start your implementation
+cp .spec-kit-templates/api-development/fastapi-endpoint.py src/api/users.py
+
+# Then customize for your specific needs
+```
 
 ## Workflow Example
 
@@ -190,6 +258,19 @@ Activate with `/my-plugin` when...
 Save as `.claude/skills/my-plugin.md` and activate with `/my-plugin`.
 
 ## Best Practices
+
+### Managing Multiple Specifications
+
+For projects with 3+ specifications, consider creating a `specs/SPECIFICATIONS_SUMMARY.md` file to track:
+
+- All specification files and their status (Draft, In Progress, Implemented)
+- Implementation priorities and phases
+- Dependencies between specs
+- Overall project progress
+
+**Template**: Copy from `templates/specs/specifications-summary.template.md`
+
+This practice helps maintain overview as projects grow. Spec-kit itself uses this approach to manage its 10+ feature specifications.
 
 ### Writing Good Specifications
 
@@ -273,11 +354,34 @@ See the `examples/` directory (coming soon) for:
 
 ## Contributing
 
-Spec-Kit is designed to grow with real-world use. Share your custom plugins:
+Spec-Kit welcomes contributions! Whether you're fixing bugs, adding features, or creating new plugins, we'd love your help.
 
-1. Create a plugin for your domain
-2. Test it across 2-3 projects
-3. Submit a PR with the plugin and documentation
+**See [CONTRIBUTING.md](CONTRIBUTING.md) for**:
+- Development setup and workflow
+- Code style guidelines
+- Pull request process
+- Plugin contribution requirements
+
+**Quick contribution guidelines**:
+1. Create a specification first (for non-trivial changes)
+2. Test in 2-3 real projects (for plugins)
+3. Follow existing patterns and conventions
+4. Update documentation
+
+## Troubleshooting
+
+Having issues with installation, setup, or usage?
+
+**See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for**:
+- Installation problems (Claude not reading CLAUDE.md, plugins not activating)
+- Usage issues (Claude not following specs, workflow questions)
+- Verification errors
+- Update and maintenance questions
+
+**Quick troubleshooting**:
+- **Claude not reading CLAUDE.md?** Verify file exists in project root: `ls -la CLAUDE.md`
+- **Plugins not working?** Check `.claude/skills/` directory and restart Claude
+- **Templates not found?** Re-run installer: `/path/to/spec-kit/install.sh .`
 
 ## Roadmap
 

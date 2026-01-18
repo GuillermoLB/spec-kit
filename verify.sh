@@ -74,6 +74,14 @@ echo ""
 echo "Templates:"
 check_file "templates/specs/feature.template.md"
 check_file "templates/specs/api.template.yaml"
+check_file "templates/specs/specifications-summary.template.md"
+echo ""
+
+echo "Documentation:"
+check_file "CONTRIBUTING.md"
+check_dir "docs"
+check_file "docs/TROUBLESHOOTING.md"
+check_file "docs/PLUGIN_DEVELOPMENT.md"
 echo ""
 
 echo "Directories:"
@@ -81,6 +89,14 @@ check_dir "core"
 check_dir "plugins"
 check_dir "templates"
 echo ""
+
+# Check for SPECIFICATIONS_SUMMARY.md if multiple specs exist
+SPEC_COUNT=$(find specs/features -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$SPEC_COUNT" -ge 3 ] && [ ! -f "specs/SPECIFICATIONS_SUMMARY.md" ]; then
+    echo -e "${YELLOW}⚠${NC} Consider creating specs/SPECIFICATIONS_SUMMARY.md for better spec tracking ($SPEC_COUNT specs found)"
+    echo "  Template: templates/specs/specifications-summary.template.md"
+    echo ""
+fi
 
 # Summary
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

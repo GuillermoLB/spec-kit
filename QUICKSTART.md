@@ -81,10 +81,10 @@ Or use the plugin directly:
 
 ### API Development Plugin
 
-The `/api` skill activates automatically when you mention API-related tasks, or you can invoke it explicitly:
+The `/api-development` (or `/api` for short) skill activates automatically when you mention API-related tasks, or you can invoke it explicitly:
 
 ```
-> "/api create POST endpoint for user registration"
+> "/api-development create POST endpoint for user registration"
 > "/api implement the API spec in specs/api/endpoints.yaml"
 > "/api add error handling to the authentication endpoint"
 
@@ -220,7 +220,7 @@ Edit `CLAUDE.md` to add project-specific rules:
 ### Plugins not working
 
 - Verify skills exist: `ls -la .claude/skills/`
-- Use exact skill name: `/api-development` not `/api-dev`
+- Use full skill name (`/api-development`) or short alias (`/api`)
 - Check skill file format (should be markdown)
 
 ### Templates not found

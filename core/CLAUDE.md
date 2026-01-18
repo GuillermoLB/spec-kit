@@ -76,10 +76,23 @@ project/
 ├── .claude/
 │   └── skills/         # Plugin skills
 ├── specs/              # All specifications
+│   ├── SPECIFICATIONS_SUMMARY.md  # Optional: Track multiple specs (3+ recommended)
 │   ├── features/       # Feature specs
 │   └── api/            # API specifications
 └── src/                # Implementation code
 ```
+
+## Managing Multiple Specifications
+
+For projects with 3+ specifications, consider creating `specs/SPECIFICATIONS_SUMMARY.md` to track:
+- All specification files and their status (Draft, In Progress, Implemented)
+- Implementation priorities and phases
+- Dependencies between specifications
+- Overall project progress
+
+**Template**: Available at `templates/specs/specifications-summary.template.md`
+
+**When to use**: The summary becomes valuable when managing multiple related features and you need a high-level overview of all planned work.
 
 ## Spec Status Tracking
 

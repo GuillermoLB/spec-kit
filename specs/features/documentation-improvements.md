@@ -1,8 +1,8 @@
 # Feature: Documentation Improvements
 
-**Status**: Draft
+**Status**: Implemented
 **Owner**: spec-kit development team
-**Last Updated**: 2026-01-17
+**Last Updated**: 2026-01-18
 **Priority**: High
 
 ## Purpose
@@ -11,15 +11,19 @@ Improve spec-kit documentation to make features more discoverable, provide clear
 
 ## Requirements
 
-- [ ] Add prominent mention of api.template.yaml in README.md
-- [ ] Create "File Reference" section in README listing all templates and their purposes
-- [ ] Improve plugin activation examples to show both automatic and explicit activation
-- [ ] Create CONTRIBUTING.md with guidelines for contributing to spec-kit
-- [ ] Create docs/TROUBLESHOOTING.md with common issues and solutions
-- [ ] Create docs/PLUGIN_DEVELOPMENT.md with detailed plugin creation guide
+- [x] Add prominent mention of api.template.yaml in README.md ✅ COMPLETED 2026-01-18
+- [x] Create "Available Templates" section in README listing all templates and their purposes ✅ COMPLETED 2026-01-18
+- [x] Clarify plugin naming (README says "/api" but directory is "api-development") ✅ COMPLETED 2026-01-18
+- [x] Create templates/specs/specifications-summary.template.md for managing multiple specs ✅ COMPLETED 2026-01-18
+- [x] Document SPECIFICATIONS_SUMMARY.md best practice in README ✅ COMPLETED 2026-01-18
+- [x] Update core/CLAUDE.md to show SPECIFICATIONS_SUMMARY.md in file tree and add guidance section ✅ COMPLETED 2026-01-18
+- [x] Improve plugin activation examples to show both automatic and explicit activation ✅ COMPLETED 2026-01-18
+- [x] Create CONTRIBUTING.md with guidelines for contributing to spec-kit ✅ COMPLETED 2026-01-18
+- [x] Create docs/TROUBLESHOOTING.md with common issues and solutions ✅ COMPLETED 2026-01-18
+- [x] Create docs/PLUGIN_DEVELOPMENT.md with detailed plugin creation guide ✅ COMPLETED 2026-01-18
 - [ ] Update README to mention testing infrastructure once available
-- [ ] Add table of contents to README for easier navigation
-- [ ] Clarify plugin naming (README says "/api" but directory is "api-development")
+- [x] Add table of contents to README for easier navigation ✅ COMPLETED 2026-01-18
+- [x] Update verify.sh to optionally check for SPECIFICATIONS_SUMMARY.md (warning if >3 specs) ✅ COMPLETED 2026-01-18
 
 ## User Stories
 
@@ -38,6 +42,10 @@ Improve spec-kit documentation to make features more discoverable, provide clear
 **As a** developer creating custom plugins
 **I want** detailed plugin development documentation
 **So that** I can create plugins that follow best practices
+
+**As a** developer managing multiple specifications
+**I want** a template for tracking specification status and implementation progress
+**So that** I can see at a glance what specs exist, their status, and what to work on next
 
 ## Acceptance Criteria
 
@@ -65,6 +73,14 @@ Improve spec-kit documentation to make features more discoverable, provide clear
    **When** I open README.md
    **Then** I see a table of contents with links to major sections
 
+7. **Given** I have 5+ specifications in my project
+   **When** I create a specs/SPECIFICATIONS_SUMMARY.md file
+   **Then** I can track all spec statuses, priorities, and implementation phases in one place
+
+8. **Given** I run verify.sh on a project with multiple specs
+   **When** there are 3+ specs but no SPECIFICATIONS_SUMMARY.md
+   **Then** I see a warning (not error) suggesting to create one
+
 ## Technical Details
 
 ### Architecture
@@ -75,6 +91,8 @@ Documentation improvements span multiple files:
 2. **CONTRIBUTING.md** - New file with contribution guidelines
 3. **docs/TROUBLESHOOTING.md** - New file with troubleshooting guide
 4. **docs/PLUGIN_DEVELOPMENT.md** - New file with plugin development guide
+5. **templates/specs/specifications-summary.template.md** - Template for tracking multiple specs
+6. **verify.sh** - Add optional check for SPECIFICATIONS_SUMMARY.md
 
 ### README.md Updates
 
@@ -557,6 +575,125 @@ Study existing plugins for reference:
 ## Questions?
 
 Open an issue or discussion on GitHub.
+```
+
+### SPECIFICATIONS_SUMMARY.md Template
+
+Create template at `templates/specs/specifications-summary.template.md`:
+
+```markdown
+# Specifications Summary
+
+**Date**: [YYYY-MM-DD]
+**Status**: [Brief project status]
+**Project**: [Project name]
+
+## Overview
+
+This document tracks all specifications for [project name]. Use this to get a high-level view of all planned and implemented features.
+
+## Specification Status
+
+| # | Specification | Priority | Status | Complexity |
+|---|--------------|----------|--------|------------|
+| 1 | feature-name.md | High | Draft | Medium |
+| 2 | another-feature.md | Medium | In Progress | Low |
+| 3 | third-feature.md | High | Implemented | High |
+
+**Total**: [N] specifications
+
+## Implementation Phases
+
+### Phase 1: [Phase Name]
+**What**: [Brief description]
+
+1. **spec-name** - [Brief description]
+2. **another-spec** - [Brief description]
+
+### Phase 2: [Phase Name]
+**What**: [Brief description]
+
+3. **spec-name** - [Brief description]
+
+## Dependencies
+
+List any cross-spec dependencies or blockers here.
+
+## Notes
+
+[Any additional context about the specifications or project]
+
+---
+
+**Last Updated**: [YYYY-MM-DD]
+```
+
+**Document in README** (add to Best Practices or a new "Managing Multiple Specs" section):
+
+```markdown
+### Managing Multiple Specifications
+
+For projects with 3+ specifications, consider creating a `specs/SPECIFICATIONS_SUMMARY.md` file to track:
+
+- All specification files and their status
+- Implementation priorities and phases
+- Dependencies between specs
+- Overall project progress
+
+**Template**: Copy from `templates/specs/specifications-summary.template.md`
+
+This practice helps maintain overview as projects grow. Spec-kit itself uses this approach to manage its 10+ feature specifications.
+```
+
+### verify.sh Updates
+
+Add optional check at the end of verify.sh (before final summary):
+
+```bash
+# Check for SPECIFICATIONS_SUMMARY.md if multiple specs exist
+SPEC_COUNT=$(find specs/features -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$SPEC_COUNT" -ge 3 ] && [ ! -f "specs/SPECIFICATIONS_SUMMARY.md" ]; then
+    echo -e "${YELLOW}⚠${NC} Consider creating specs/SPECIFICATIONS_SUMMARY.md for better spec tracking (3+ specs found)"
+    echo "  Template: templates/specs/specifications-summary.template.md"
+fi
+```
+
+### core/CLAUDE.md Updates
+
+Update the "File Organization" section and add new "Managing Multiple Specifications" section:
+
+**File Organization section (update):**
+
+```markdown
+## File Organization
+
+```
+project/
+├── CLAUDE.md           # This file (copied from spec-kit)
+├── .claude/
+│   └── skills/         # Plugin skills
+├── specs/              # All specifications
+│   ├── SPECIFICATIONS_SUMMARY.md  # Optional: Track multiple specs (3+ recommended)
+│   ├── features/       # Feature specs
+│   └── api/            # API specifications
+└── src/                # Implementation code
+```
+```
+
+**New section (add after File Organization):**
+
+```markdown
+## Managing Multiple Specifications
+
+For projects with 3+ specifications, consider creating `specs/SPECIFICATIONS_SUMMARY.md` to track:
+- All specification files and their status (Draft, In Progress, Implemented)
+- Implementation priorities and phases
+- Dependencies between specifications
+- Overall project progress
+
+**Template**: Available at `templates/specs/specifications-summary.template.md`
+
+**When to use**: The summary becomes valuable when managing multiple related features and you need a high-level overview of all planned work.
 ```
 
 ### Security Considerations
