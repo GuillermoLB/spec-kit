@@ -43,17 +43,117 @@ Trivial changes don't require specs:
 
 ## Testing Your Changes
 
-Once testing infrastructure exists, run:
+Spec-Kit has a comprehensive pytest-based test suite for the Python CLI.
 
+### Running Tests
+
+**Run all tests:**
 ```bash
-./tests/run_tests.sh  # Run all tests
+./tests/run_tests.sh  # Full suite with coverage
 ```
 
-Currently, manual testing is required:
-1. Run `./verify.sh` to ensure file structure is correct
-2. Test `install.sh` in a clean project directory
-3. Verify all documentation links work
-4. Test any new features in a real project
+**Quick test run (no coverage):**
+```bash
+./tests/run_tests.sh --quick
+```
+
+**Verbose output:**
+```bash
+./tests/run_tests.sh --verbose
+```
+
+**Run specific test file:**
+```bash
+./tests/run_tests.sh --file tests/test_installer.py
+```
+
+**Using pytest directly:**
+```bash
+# Install test dependencies
+pip install -e '.[test]'
+
+# Run all tests
+pytest tests/
+
+# Run with coverage report
+pytest tests/ --cov=spec_kit --cov-report=html
+
+# Run specific test file
+pytest tests/test_installer.py -v
+
+# Run specific test
+pytest tests/test_installer.py::test_install_core_creates_directory_structure -v
+```
+
+### Test Organization
+
+```
+tests/
+├── conftest.py              # pytest fixtures
+├── test_cli.py              # CLI dispatcher tests
+├── test_installer.py        # Installer class tests
+├── test_validator.py        # Validator class tests
+├── test_file_ops.py         # File operation tests
+├── test_colors.py           # Color utility tests
+├── test_commands.py         # Command handler tests (init, verify)
+├── test_integration.py      # End-to-end integration tests
+└── run_tests.sh             # Test runner script
+```
+
+### Writing Tests
+
+**Unit tests** - Test individual functions/methods:
+```python
+def test_safe_copy_file_creates_parent_directories(tmp_path):
+    """Test that parent directories are created if needed."""
+    src = tmp_path / "source.txt"
+    dest = tmp_path / "nested" / "dir" / "dest.txt"
+    src.write_text("test content")
+
+    result = safe_copy_file(src, dest)
+
+    assert result is True
+    assert dest.exists()
+    assert dest.parent.is_dir()
+```
+
+**Integration tests** - Test complete workflows:
+```python
+def test_full_installation_workflow(mock_spec_kit_root, mock_target_dir):
+    """Test complete init workflow."""
+    installer = Installer(mock_target_dir, mock_spec_kit_root)
+
+    installer.run_installation(
+        plugins=['api-development'],
+        force=False,
+        interactive=False
+    )
+
+    # Verify all files created
+    assert (mock_target_dir / "CLAUDE.md").exists()
+    assert (mock_target_dir / ".claude" / "skills").exists()
+```
+
+### Test Coverage Goals
+
+- **Installer**: >90% coverage (core functionality)
+- **Validator**: >90% coverage (core functionality)
+- **File ops**: >85% coverage (utility functions)
+- **CLI**: >80% coverage (routing logic)
+- **Commands**: >85% coverage (handlers)
+- **Overall**: >80% coverage
+
+Current coverage: **88%** (162 tests passing)
+
+### Manual Testing
+
+In addition to automated tests, manually verify:
+
+1. Run `spec-kit init` in a clean project directory
+2. Run `spec-kit verify` to validate installation
+3. Test interactive plugin selection
+4. Verify all documentation links work
+5. Test any new features in a real project
 
 ## Code Style
 

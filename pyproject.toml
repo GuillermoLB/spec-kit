@@ -36,5 +36,22 @@ Documentation = "https://github.com/spec-kit/spec-kit#readme"
 Repository = "https://github.com/spec-kit/spec-kit"
 Issues = "https://github.com/spec-kit/spec-kit/issues"
 
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
 [tool.setuptools]
 packages = ["spec_kit", "spec_kit.commands", "spec_kit.core", "spec_kit.utils"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--strict-markers",
+    "--tb=short",
+]
