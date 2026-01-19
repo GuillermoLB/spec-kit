@@ -15,12 +15,10 @@ This file defines the development workflow for the spec-kit project itself. We p
 
 **Before writing any code:**
 
-1. Read `specs/architecture.md` (if exists) to understand spec-kit's system design
-2. Check if a specification exists in `specs/features/` directory
-3. If no spec exists, create one using `templates/specs/feature.template.md`
-4. Read and understand the complete specification
-5. Ensure the feature aligns with spec-kit's architectural principles
-6. Ask clarifying questions if the spec is ambiguous
+1. Check if a specification exists in `specs/features/` directory
+2. If no spec exists, create one using `templates/specs/feature.template.md`
+3. Read and understand the complete specification
+4. Ask clarifying questions if the spec is ambiguous
 
 **Specification Requirements:**
 - Use the feature template format
@@ -73,14 +71,11 @@ spec-kit/
 ├── templates/                 # Specification templates
 │   └── specs/
 │       ├── feature.template.md
-│       ├── architecture.template.md
 │       └── api.template.yaml
 ├── specs/                     # Specifications for spec-kit features
-│   ├── architecture.md        # Spec-kit system architecture (to be created)
 │   └── features/              # Feature specifications
 │       ├── testing-infrastructure.md
 │       ├── documentation-improvements.md
-│       ├── architecture-documentation.md
 │       ├── example-fastapi-todo.md
 │       ├── example-ai-chatbot.md
 │       ├── example-sam-serverless.md
@@ -132,28 +127,12 @@ Mark spec status at the top of each spec file:
 - Database plugin
 - Frontend plugin
 
-## Architecture Governance
-
-**Architecture for Spec-Kit Itself:**
-
-- Spec-kit's architecture is documented in `specs/architecture.md` (to be created)
-- Major architectural changes require specs in `specs/features/architecture-*.md`
-- Follow the hybrid approach: living document (architecture.md) + versioned changes (architecture-*.md)
-- After implementing architectural changes, update `specs/architecture.md` to reflect current state
-
-**Examples of Major Architectural Changes:**
-- Changing the plugin system architecture
-- Adding a new template rendering engine
-- Modifying the installer/verification workflow
-- Multi-language support for templates
-
 ## Contributing to Spec-Kit
 
 1. **For Features**: Create spec first, get approval, then implement
 2. **For Bug Fixes**: Create issue describing bug, then fix
 3. **For Documentation**: Can update directly for minor changes, spec for major rewrites
 4. **For Plugins**: Follow plugin development spec, test in 2-3 projects first
-5. **For Architecture Changes**: Create architecture-*.md spec, implement, update architecture.md
 
 ## Verification Before Commits
 

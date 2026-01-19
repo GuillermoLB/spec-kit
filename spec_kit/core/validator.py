@@ -254,6 +254,23 @@ class Validator:
 
         return {'documentation': results}
 
+    def check_architecture_doc(self) -> Optional[ValidationResult]:
+        """Check for architecture documentation.
+
+        Returns:
+            ValidationResult with info message if architecture.md exists, None otherwise
+        """
+        arch_file = self.target_path / "specs" / "architecture.md"
+
+        if arch_file.exists():
+            return ValidationResult(
+                True,
+                "specs/architecture.md (architectural principles documented)",
+                "specs/architecture.md"
+            )
+
+        return None
+
     def check_specs_summary(self) -> Optional[ValidationResult]:
         """Check if SPECIFICATIONS_SUMMARY.md is needed.
 
@@ -298,6 +315,12 @@ class Validator:
         all_results.update(self.check_plugins())
         all_results.update(self.check_templates())
         all_results.update(self.check_documentation())
+
+        # Check for architecture doc (info message)
+        arch_info = self.check_architecture_doc()
+        if arch_info:
+            all_results['architecture_info'] = arch_info
+            self.pass_count += 1  # Already counted in check, but showing as info
 
         # Check for specs summary warning
         specs_warning = self.check_specs_summary()
@@ -362,6 +385,11 @@ class Validator:
                     else:
                         colors.error(result.message)
                 print()
+
+        # Print architecture info
+        if 'architecture_info' in results:
+            colors.success(results['architecture_info'].message)
+            print()
 
         # Print specs warning
         if 'specs_warning' in results:

@@ -285,6 +285,48 @@ class Installer:
         except Exception as e:
             colors.warning(f"Could not install spec templates: {e}")
 
+    def offer_architecture_doc(self, interactive: bool = True) -> None:
+        """Optionally create architecture.md from template.
+
+        Args:
+            interactive: If True, prompt user; if False, skip
+        """
+        if not interactive:
+            return
+
+        print()
+        colors.info("Would you like to create a system architecture document?")
+        print()
+        print("  This creates specs/architecture.md to document:")
+        print("  - Core architectural principles")
+        print("  - System design and component structure")
+        print("  - Key architectural decisions")
+        print()
+
+        try:
+            response = input("Create architecture.md? (y/n): ").strip().lower()
+            print()
+
+            if response in ('y', 'yes'):
+                arch_template = self.spec_kit_root / "templates" / "specs" / "architecture.template.md"
+                arch_dest = self.target_path / "specs" / "architecture.md"
+
+                if arch_template.exists():
+                    safe_copy_file(arch_template, arch_dest, force=True)
+                    colors.success("Created specs/architecture.md")
+                    print()
+                    colors.info("Next: Edit specs/architecture.md with your project's architecture")
+                else:
+                    colors.warning("architecture.template.md not found, skipping")
+            else:
+                colors.info("Skipped architecture.md (create later from templates/specs/architecture.template.md)")
+            print()
+
+        except KeyboardInterrupt:
+            print()
+            colors.info("Skipped architecture.md")
+            print()
+
     def update_project_gitignore(self) -> None:
         """Update .gitignore with spec-kit entries."""
         entries = get_gitignore_entries()
@@ -401,6 +443,7 @@ class Installer:
         self.install_core()
         self.install_plugins()
         self.install_templates()
+        self.offer_architecture_doc(interactive=interactive)
         self.update_project_gitignore()
 
         # Done

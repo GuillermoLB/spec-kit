@@ -14,10 +14,12 @@ This file defines the core principles and workflow for spec-driven development. 
 ### Phase 1: Specify
 **Before writing any code:**
 
-1. Check if a specification exists in `specs/` directory
-2. If no spec exists, create one or ask the user to provide it
-3. Read and understand the complete specification
-4. Ask clarifying questions if the spec is ambiguous
+1. Read `specs/architecture.md` (if exists) to understand system design principles
+2. Check if a specification exists in `specs/` directory
+3. If no spec exists, create one or ask the user to provide it
+4. Read and understand the complete specification
+5. Ensure the feature aligns with architectural principles
+6. Ask clarifying questions if the spec is ambiguous
 
 **Specification Format:**
 ```markdown
@@ -76,11 +78,29 @@ project/
 ├── .claude/
 │   └── skills/         # Plugin skills
 ├── specs/              # All specifications
-│   ├── SPECIFICATIONS_SUMMARY.md  # Optional: Track multiple specs (3+ recommended)
+│   ├── architecture.md              # Optional: System architecture (living document)
+│   ├── SPECIFICATIONS_SUMMARY.md    # Optional: Track multiple specs (3+ recommended)
 │   ├── features/       # Feature specs
+│   │   └── architecture-*.md        # Architectural change specs (when needed)
 │   └── api/            # API specifications
 └── src/                # Implementation code
 ```
+
+## Architecture Documentation
+
+For projects with defined system architecture, consider creating `specs/architecture.md` as a living document:
+- Documents current architectural principles and design decisions
+- Serves as the single source of truth for system structure
+- Read before implementing any feature to ensure alignment
+- Updated when architectural changes are implemented
+
+**Template**: Available at `templates/specs/architecture.template.md`
+
+**When architectural changes are needed:**
+1. Create `specs/features/architecture-[change-name].md` using the feature template
+2. Follow the standard Specify → Plan → Implement → Validate workflow
+3. After implementation, update `specs/architecture.md` to reflect new current state
+4. Mark the architecture-*.md spec as "Implemented"
 
 ## Managing Multiple Specifications
 
