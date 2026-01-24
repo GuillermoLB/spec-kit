@@ -1,99 +1,118 @@
-# Spec-Kit Development Constitution
+# Spec-Driven Development Constitution
 
-This file defines the development workflow for the spec-kit project itself. We practice what we preach: spec-kit is developed using spec-driven development.
+This file defines the core principles and workflow for spec-driven development. These rules are immutable and apply to every change.
 
 ## Core Principles
 
-1. **Specification First**: Never implement features without a written specification in `specs/features/`
-2. **Dogfooding**: Use spec-kit's own methodology to develop spec-kit
-3. **Quality Over Speed**: Maintain high standards for all components
-4. **Documentation Required**: Every feature must be documented
+1. **Specification First**: Never implement features without a written specification
+2. **Explicit Requirements**: All requirements must be clearly documented before coding
+3. **Validation Required**: Every implementation must be validated against its spec
+4. **Incremental Progress**: Break large features into small, spec'd increments
 
 ## Workflow
 
 ### Phase 1: Specify
-
 **Before writing any code:**
 
-1. Read `specs/architecture.md` (if exists) to understand spec-kit's system design
-2. Check if a specification exists in `specs/features/` directory
-3. If no spec exists, create one using `templates/specs/feature.template.md`
+1. Read `specs/architecture.md` (if exists) to understand system design principles
+2. Check if a specification exists in `specs/` directory
+3. If no spec exists, create one or ask the user to provide it
 4. Read and understand the complete specification
-5. Ensure the feature aligns with spec-kit's architectural principles
+5. Ensure the feature aligns with architectural principles
 6. Ask clarifying questions if the spec is ambiguous
 
-**Specification Requirements:**
-- Use the feature template format
-- Include clear acceptance criteria
-- Define verification steps
-- List dependencies
-- Mark status: Draft → In Progress → Implemented
+**Specification Format:**
+```markdown
+# Feature: [Name]
+
+## Purpose
+Why this feature exists
+
+## Requirements
+- [ ] Requirement 1
+- [ ] Requirement 2
+
+## Acceptance Criteria
+How to verify success
+
+## Technical Notes
+Implementation considerations
+```
 
 ### Phase 2: Plan
-
 **After understanding the spec:**
 
 1. Identify all files that need changes
 2. Consider edge cases and error handling
 3. Plan the implementation approach
-4. Present the plan for approval
+4. Present the plan to the user for approval
 
 ### Phase 3: Implement
-
 **During implementation:**
 
 1. Follow existing code patterns and conventions
 2. Implement requirements incrementally
 3. Check off acceptance criteria as you complete them
-4. Write tests that validate spec requirements (once testing infrastructure exists)
-5. Update documentation as features are added
+4. Write tests that validate spec requirements
 
 ### Phase 4: Validate
-
 **After implementation:**
 
 1. Verify all acceptance criteria are met
-2. Run tests (once testing infrastructure available)
-3. Run `./verify.sh` to ensure project structure is valid
-4. Update spec status to "Implemented"
-5. Document any deviations from the spec
+2. Run tests (if applicable)
+3. Update spec status to "Implemented"
+4. Document any deviations from the spec
 
-## Project Structure
+## Available Plugins
+
+Plugins extend this workflow with domain-specific patterns. Activate them using skills:
+
+- `/api` - API development patterns (FastAPI, AWS SAM)
+- `/ai-app` - AI application patterns (LLM integration)
+
+## File Organization
 
 ```
-spec-kit/
-├── CLAUDE.md                  
-├── README.md                  # Main documentation
-├── QUICKSTART.md              # Quick start guide
-├── core/
-│   └── CLAUDE.md              # Constitution distributed to projects
-├── plugins/                   # Plugin implementations
-│   ├── api-development/
-│   └── ai-app/
-├── templates/                 # Specification templates
-│   └── specs/
-│       ├── feature.template.md
-│       ├── architecture.template.md
-│       └── api.template.yaml
-├── specs/                     # Specifications for spec-kit features
-│   ├── architecture.md        # Spec-kit system architecture (to be created)
-│   └── features/              # Feature specifications
-│       ├── testing-infrastructure.md
-│       ├── documentation-improvements.md
-│       ├── architecture-documentation.md
-│       ├── example-fastapi-todo.md
-│       ├── example-ai-chatbot.md
-│       ├── example-sam-serverless.md
-│       ├── plugin-testing.md
-│       ├── plugin-cicd.md
-│       ├── plugin-database.md
-│       └── plugin-frontend.md
-├── examples/                  # Example projects (to be created)
-├── tests/                     # Test suite (to be created)
-├── docs/                      # Detailed documentation (to be created)
-├── install.sh                 # Interactive installer
-└── verify.sh                  # Project structure verification
+project/
+├── CLAUDE.md           # This file (copied from spec-kit)
+├── .claude/
+│   └── skills/         # Plugin skills
+├── specs/              # All specifications
+│   ├── architecture.md              # Optional: System architecture (living document)
+│   ├── SPECIFICATIONS_SUMMARY.md    # Optional: Track multiple specs (3+ recommended)
+│   ├── features/       # Feature specs
+│   │   └── architecture-*.md        # Architectural change specs (when needed)
+│   └── api/            # API specifications
+└── src/                # Implementation code
 ```
+
+## Architecture Documentation
+
+For projects with defined system architecture, consider creating `specs/architecture.md` as a living document:
+- Documents current architectural principles and design decisions
+- Serves as the single source of truth for system structure
+- Read before implementing any feature to ensure alignment
+- Updated when architectural changes are implemented
+
+**Template**: Available at `templates/specs/architecture.template.md`
+
+**When architectural changes are needed:**
+1. Create `specs/features/architecture-[change-name].md` using the feature template
+2. Follow the standard Specify → Plan → Implement → Validate workflow
+3. After implementation, update `specs/architecture.md` to reflect new current state
+4. Mark the architecture-*.md spec as "Implemented"
+
+## Managing Multiple Specifications
+
+For projects with 3+ specifications, consider creating `specs/SPECIFICATIONS_SUMMARY.md` to track:
+- All specification files and their status (Draft, In Progress, Implemented)
+- Implementation priorities and phases
+- Dependencies between specifications
+- Overall project progress
+
+**Template**: Available at `templates/specs/specifications-summary.template.md`
+
+**When to use**: The summary becomes valuable when managing multiple related features and you need a high-level overview of all planned work.
 
 ## Spec Status Tracking
 
@@ -101,90 +120,27 @@ Mark spec status at the top of each spec file:
 
 ```markdown
 **Status**: Draft | In Progress | Implemented | Deprecated
-**Owner**: spec-kit development team
+**Owner**: [Name]
 **Last Updated**: YYYY-MM-DD
-**Priority**: High | Medium | Low
 ```
 
 ## Quality Standards
 
 1. **No Dead Code**: Remove commented code and unused imports
 2. **Error Handling**: Handle errors explicitly, don't silently fail
-3. **Documentation**: Every feature must be documented
-4. **Testing**: Once testing infrastructure exists, all features must have tests
-5. **Examples**: Complex features should have example projects
-6. **Verification**: All changes must pass `./verify.sh`
+3. **Documentation**: Code should be self-documenting, add comments only for "why" not "what"
+4. **Testing**: Critical paths must have tests
 
-## Development Priorities
+## When Specs Are Missing
 
-### Priority 1: Foundation
-- Testing infrastructure
-- Documentation improvements
+If asked to implement something without a spec:
 
-### Priority 2: Examples
-- FastAPI Todo API
-- AI Chatbot
-- Serverless API (SAM)
+1. Inform the user that a spec is required
+2. Offer to create a draft spec based on the request
+3. Wait for spec approval before implementing
 
-### Priority 3: Plugins
-- Testing plugin
-- CI/CD plugin
-- Database plugin
-- Frontend plugin
-
-## Architecture Governance
-
-**Architecture for Spec-Kit Itself:**
-
-- Spec-kit's architecture is documented in `specs/architecture.md` (to be created)
-- Major architectural changes require specs in `specs/features/architecture-*.md`
-- Follow the hybrid approach: living document (architecture.md) + versioned changes (architecture-*.md)
-- After implementing architectural changes, update `specs/architecture.md` to reflect current state
-
-**Examples of Major Architectural Changes:**
-- Changing the plugin system architecture
-- Adding a new template rendering engine
-- Modifying the installer/verification workflow
-- Multi-language support for templates
-
-## Contributing to Spec-Kit
-
-1. **For Features**: Create spec first, get approval, then implement
-2. **For Bug Fixes**: Create issue describing bug, then fix
-3. **For Documentation**: Can update directly for minor changes, spec for major rewrites
-4. **For Plugins**: Follow plugin development spec, test in 2-3 projects first
-5. **For Architecture Changes**: Create architecture-*.md spec, implement, update architecture.md
-
-## Verification Before Commits
-
-Before committing changes:
-
-1. Run `./verify.sh` - Ensure all required files exist
-2. Run tests (once available) - `./tests/run_tests.sh`
-3. Check documentation is updated
-4. Ensure spec status is updated
-5. Review git diff for unintended changes
-
-## Version Management
-
-- Follow semantic versioning (MAJOR.MINOR.PATCH)
-- Update CHANGELOG.md with all changes
-- Tag releases in git
-- Update version in README
-
-## Philosophy
-
-Spec-kit is developed using the same spec-driven methodology it promotes:
-
-- **Transparency**: All features have clear specifications
-- **Quality**: Every component meets high standards
-- **Usability**: Real developers use this daily
-- **Practicality**: Solve actual problems, not theoretical ones
-- **Consistency**: Follow our own rules
+**Exception**: Trivial changes (typos, formatting) don't require specs.
 
 ---
 
-*This constitution ensures spec-kit maintains quality and consistency while practicing the methodology it teaches.*
-
-**Version**: 1.0.0
-**Last Updated**: 2026-01-17
+*This constitution is based on industry-standard spec-driven development practices and is optimized for Claude Code workflows.*
